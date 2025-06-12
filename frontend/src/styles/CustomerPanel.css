@@ -1,0 +1,75 @@
+.card {
+ height: 100%;
+  border: 1px solid #333;
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* Kart içeriği */
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Kart başlıkları ve metin */
+.card-body h5 {
+  color: #333;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-body .card-subtitle {
+  color: #333 !important;
+  font-size: 0.9rem;
+}
+
+.card-body .card-text {
+  color: #333;
+  font-size: 1rem;
+}
+
+
+body {
+  margin: 40px;
+}
+
+.rating {
+  margin-top: 40px;
+  border: none;
+  float: left;
+}
+
+.rating > label {
+  color: #90A0A3;
+  float: right;
+}
+
+.rating > label:before {
+  margin: 5px;
+  font-size: 2em;
+
+content:"★";
+  display: inline-block;
+}
+
+.rating > input {
+  display: none;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+  color: #000000;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label {
+    
+  color: #333;
+}

@@ -1,0 +1,49 @@
+﻿.navbar-custom {
+  background:transparent;
+  height: 100px;
+  padding: 0 20px;
+  z-index: 1000;
+  pointer-events: none; /* kritik */
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navbar-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.navbar-custom * {
+  pointer-events: auto;
+}
+
+.navbar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-img {
+  width: 13.4vw;
+  height: 8.1vh;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-right: 50px;
+}
+
+.navbar-login-text {
+  font-size: 12px;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}

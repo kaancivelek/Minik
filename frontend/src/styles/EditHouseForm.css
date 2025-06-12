@@ -1,0 +1,49 @@
+.edit-house-form-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 24px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+
+.edit-house-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edit-house-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #444;
+
+
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.edit-house-input:focus {
+  border: 1.5px solid #4caf50;
+
+}
+
+.edit-house-submit {
+  padding: 12px;
+  border-radius: 6px;
+
+
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+
+.edit-house-submit:hover {
+  background: #fff;
+}

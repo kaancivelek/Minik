@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>ff73148a-f802-4e1e-bdea-38f86eca04e4</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt" Version="1.0.0" />
+    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0-preview1.25120.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
+  </ItemGroup>
+
+</Project>

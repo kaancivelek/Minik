@@ -1,0 +1,116 @@
+.filter-toggle-btn {
+font-size: 12px;
+    padding: 0 10px;
+   background: transparent;
+    border:none;
+    margin:auto;
+    color: var(--accent-color);
+    transition: background 0.3s ease;
+  }
+  
+
+  
+  .navbar input[type="text"],
+  .navbar select {
+    font-size: 14px;
+    padding: 5px 8px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--text-color);
+    width: 100%;
+  }
+  
+  .navbar input:focus,
+  .navbar select:focus {
+    outline: none;
+    border-bottom-color: var(--accent-color);
+    background-color: transparent;
+  }
+  
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: all 0.4s ease;
+    padding: 10px;
+  }
+  
+  .filter-panel {
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: width 0.4s ease;
+    width: 0;
+    opacity: 0;
+  }
+  
+  .filter-panel.show {
+    width: 300px; /* istediğin genişlik */
+    opacity: 1;
+  }
+  
+  .filter-toggle-btn {
+    font-size: 12px;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  .filter-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Hover efekti */
+    border-radius: 5px; /* Köşe yuvarlama */
+  }
+  
+  .navbar input[type="text"],
+  .navbar select {
+    font-size: 14px;
+    padding: 5px 8px;
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    width: 100%;
+    min-width: 120px;
+  }
+  
+  .filter-panel {
+    display: flex;
+    gap: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.4s ease;
+    width: 0;
+    opacity: 0;
+    background-color: transparent;
+    border-radius: 10px;
+    padding: 0 5px;
+  }
+  
+  .filter-panel.show {
+    width: 300px;
+    opacity: 1;
+    background-color: white; /* <- Beyaz arka plan */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* hafif gölge ile belirginlik */
+  }
+  
+.filter-container {
+ 
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.filter-container.visible {
+  transform: translateY(0); /* Görünür durumda */
+  opacity: 1;
+}
+
+.filter-container.hidden {
+  transform: translateY(-100%); /* Yukarı kaydır */
+  opacity: 0;
+}
+
+

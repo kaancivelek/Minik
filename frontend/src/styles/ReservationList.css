@@ -1,0 +1,86 @@
+
+.reservation-list-title {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+  color: #000;
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reservation-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.reservation-card {
+  background-color: #f9f9f9;
+  border: 1px solid #000;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0 #000;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reservation-card:hover {
+  transform: translateY(-4px);
+
+}
+
+.reservation-card p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.reservation-card strong {
+  color: #000;
+}
+
+
+.status-pending {
+  box-shadow: 4px 4px 0 #007bff; /* mavi */
+}
+
+.status-confirmed {
+ box-shadow: 4px 4px 0 #28a745; /* yeşil */
+}
+
+.status-completed {
+ box-shadow: 4px 4px 0 #343a40; /* siyah */
+}
+
+.status-canceled {
+  box-shadow: 4px 4px 0 #dc3545; /* kırmızı */
+}
+
+.choice-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.accept-button{
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.reject-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}

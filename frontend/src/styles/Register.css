@@ -1,0 +1,49 @@
+.register-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+  }
+  
+  .register-form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in-out;
+    width: 350px;
+  }
+  
+  .animated-input {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+  
+  .animated-input:focus {
+    border-color: black;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    transform: scale(1.02);
+  }
+  
+  .animated-button {
+    margin-top: 10px;
+    transition: transform 0.2s ease;
+    border-radius: 8px;
+  }
+  
+  .animated-button:hover {
+    transform: scale(1.05);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

@@ -1,0 +1,6 @@
+@backend_HostAddress = http://localhost:3001
+
+GET {{backend_HostAddress}}/Minik/
+Accept: application/json
+
+###
