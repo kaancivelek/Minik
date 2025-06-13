@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import "../styles/PropertyOwnerPanel.css"; // Assuming you have a CSS file for styles
+import noListing from "../utils/noListing";
 export default function PropertyOwnerPanel({ user }) {
   const [tinyHousesOfPropertyOwner, setTinyHouseOfUser] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,10 +57,12 @@ export default function PropertyOwnerPanel({ user }) {
   return (
     <div className="listing-page" style={{ padding: "1rem" }}>
       {loading && <div>Yükleniyor...</div>}
-      {error && <div style={{ color: "red" }}>Hata: {error}</div>}
+      
       <h2>Ev Sahibi Paneli</h2>
-      <Button onClick={goInsertTinyHouse}>Ev Bilgisi Ekle</Button>
+      
       <Row>
+        <input type="button" onClick={goInsertTinyHouse} value="İlan Bilgisi Ekle"style={{background:"transparent",justifyContent:"center"}}></input>
+        {error?noListing():<></>}
         {tinyHousesOfPropertyOwner.map((item) => (
           <Col
             key={item.id}

@@ -4,7 +4,7 @@ import { getTinyHouseByRange } from "../services/tinyHouseService";
 import { getTinyHouseImagesByTinyHouseId } from "../services/houseImages";
 import ProductCard from "../components/ProductCard";
 import { filterListings, sortListings } from "../utils/listingUtils";
-
+import noListing from "../utils/noListing"; // Importing the noListing component
 
 export default function ListingPage({ filterText, sortOrder }) {
   const [tinyHouses, setTinyHouses] = useState([]);
@@ -93,7 +93,7 @@ export default function ListingPage({ filterText, sortOrder }) {
           />
         ))
       ) : (
-        <p>No Tiny Houses Found</p>
+        noListing() // Render the noListing component if there are no listings
       )}
 
      {hasMore && (

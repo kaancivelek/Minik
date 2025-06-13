@@ -13,7 +13,7 @@ import {
 import "../styles/CustomerPanel.css";
 import { toast, Slide } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+import noListing from "../utils/noListing";
 export default function CustomerPanel({ user }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -173,9 +173,10 @@ export default function CustomerPanel({ user }) {
   return (
     <div className="listing-page" style={{ padding: "1rem" }}>
       {loading && <div>Yükleniyor...</div>}
-      {error && <div style={{ color: "red" }}>Hata: {error}</div>}
+
       <h2>Müşteri Paneli</h2>
       <Row>
+         {error==="Bu kullanıcıya ait rezervasyon bulunamadı."?noListing():<></>}
         {reservations.map((item) => (
           <Col
             key={item.tinyHouseId}

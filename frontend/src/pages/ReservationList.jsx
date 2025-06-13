@@ -27,7 +27,12 @@ export default function ReservationList() {
         })
       );
 
-      setReservations(reservationsWithNames);
+      // totalPrice 1'den büyük olan rezervasyonları filtrele
+      const filteredReservations = reservationsWithNames.filter(
+        reservation => reservation.totalPrice > 1
+      );
+
+      setReservations(filteredReservations);
     } catch (error) {
       console.error("Error fetching reservations:", error);
     }

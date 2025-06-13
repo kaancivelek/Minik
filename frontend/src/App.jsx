@@ -15,7 +15,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
 import TinyHouseAdding from "./pages/TinyHouseAdding";
 import ReservationList from "./pages/ReservationList";
-
+import Loading from "./utils/Loading";
 const AdminApp = lazy(() => import("../admin/src/App"));
 
 function App() {
@@ -45,7 +45,10 @@ function App() {
   const insertTinyHouse = (tinyHouseId) => {
     setRouterTinyHouse(tinyHouseId);
   };
-
+if( isUserLoading) {
+  <Loading />
+}
+else{
   return (
     <Container fluid className="bodyContainer">
       <Navi
@@ -121,6 +124,6 @@ function App() {
       <ToastContainer autoClose={2000} theme="dark" transition={Slide} />
     </Container>
   );
-}
+}}
 
 export default App;

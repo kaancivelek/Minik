@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

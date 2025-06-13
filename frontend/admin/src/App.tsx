@@ -13,6 +13,7 @@ import Discounts from './pages/Discounts';
 import Logs from './pages/Logs';
 import SupportTickets from './pages/SupportTickets';
 import SystemSettings from './pages/SystemSettings';
+import Loading from './utils/Loading'; // Loading component for lazy loading
 
 // Lazy loading ile sayfaları yükleyelim
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
@@ -44,32 +45,32 @@ function App() {
               <AdminLayout />
             </ProtectedRoute>
           }>
-            <Route index element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="/dashboard" element={
-              <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                <Dashboard />
-              </React.Suspense>
-            } />
-            <Route path="/users" element={
-              <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                <Users />
-              </React.Suspense>
-            } />
-            <Route path="/houses" element={
-              <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                <Houses />
-              </React.Suspense>
-            } />
-            <Route path="/reservations" element={
-              <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                <Reservations />
-              </React.Suspense>
-            } />
-            <Route path="/settings" element={
-              <React.Suspense fallback={<div>Yükleniyor...</div>}>
-                <Settings />
-              </React.Suspense>
-            } />
+           <Route path="/dashboard" element={
+  <React.Suspense fallback={<Loading />}>
+    <Dashboard />
+  </React.Suspense>
+} />
+<Route path="/users" element={
+  <React.Suspense fallback={<Loading />}>
+    <Users />
+  </React.Suspense>
+} />
+<Route path="/houses" element={
+  <React.Suspense fallback={<Loading />}>
+    <Houses />
+  </React.Suspense>
+} />
+<Route path="/reservations" element={
+  <React.Suspense fallback={<Loading />}>
+    <Reservations />
+  </React.Suspense>
+} />
+<Route path="/settings" element={
+  <React.Suspense fallback={<Loading />}>
+    <Settings />
+  </React.Suspense>
+} />
+
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/maintenance" element={<Maintenance />} />
