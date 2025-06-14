@@ -20,12 +20,14 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
     const fetchCalendarData = async () => {
       if (tinyHouse?.id) {
         setIsLoading(true);
+
         try {
           const { selectableRanges, unavailableDays: unavailable } = await getSelectableDateRanges(tinyHouse.id);
+     
           setAvailableRanges(selectableRanges);
           setUnavailableDays(unavailable);
         } catch (error) {
-          console.error('Error fetching calendar data:', error);
+          console.error('Calendar data fetch error:', error);
         } finally {
           setIsLoading(false);
         }
@@ -36,7 +38,12 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
   }, [tinyHouse?.id]);
 
   const formatDateKey = (date) => {
-    return date.toISOString().split('T')[0];
+    // Saat dilimi problemini çözmek için local tarih kullan
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const formatted = `${year}-${month}-${day}`;
+    return formatted;
   };
 
   const getDayStatus = (date) => {
@@ -47,18 +54,34 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
     const oneYearLater = new Date(today);
     oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
 
-    if (date < today) return 'past';
-    if (date > oneYearLater) return 'future';
+    if (date < today) {
+      return 'past';
+    }
+    if (date > oneYearLater) {
+      return 'future';
+    }
 
-    if (unavailableDays[dateKey] === 'maintenance') return 'maintenance';
-    if (unavailableDays[dateKey] === 'reservation') return 'reservation';
+    // Bakım günlerini kontrol et
+    if (unavailableDays[dateKey] === 'maintenance') {
+      return 'maintenance';
+    }
 
+    // Rezervasyon günlerini kontrol et
+    // ÖNEMLİ: Check-out günü dahil değil, sadece check-in günü dahil
+    if (unavailableDays[dateKey] === 'reservation') {
+      return 'reservation';
+    }
+
+    // Müsait aralıklarda mı kontrol et
     const isAvailable = availableRanges.some(range => {
       const rangeStart = new Date(range.start);
       const rangeEnd = new Date(range.end);
       rangeStart.setHours(0, 0, 0, 0);
       rangeEnd.setHours(0, 0, 0, 0);
-      return date >= rangeStart && date <= rangeEnd;
+      
+      // Check-in dahil, check-out dahil değil mantığı
+      // Yani 14-15 rezervasyonunda 14 dahil, 15 dahil değil
+      return date >= rangeStart && date < rangeEnd;
     });
 
     return isAvailable ? 'available' : 'unavailable';
@@ -97,18 +120,25 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
 
   const handleDateClick = (date) => {
     const status = getDayStatus(date);
-    if (status !== 'available') return;
+    
+    if (status !== 'available') {
+      console.log('Clicked unavailable date:', formatDateKey(date), 'Status:', status);
+      return;
+    }
 
     const clickedDateStr = formatDateKey(date);
 
     if (!startDate || (startDate && endDate)) {
+      console.log('🎯 Setting start date:', clickedDateStr);
       onDateChange('startDate', clickedDateStr);
       onDateChange('endDate', '');
     } else if (startDate && !endDate) {
       const startDateObj = new Date(startDate);
       if (date < startDateObj) {
+        // Daha erken bir tarih seçildi, start date'i güncelle
         onDateChange('startDate', clickedDateStr);
       } else {
+        // End date seçildi
         onDateChange('endDate', clickedDateStr);
       }
     }
@@ -137,24 +167,28 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
     
     const days = [];
 
+    // Önceki ayın günleri
     for (let i = 0; i < firstDayWeekday; i++) {
       const prevDate = new Date(currentYear, currentMonth, -firstDayWeekday + i + 1);
       const status = getDayStatus(prevDate);
+
       days.push(
         <div
           key={`prev-${i}`}
           className={`${getDayClass(prevDate, status)} other-month`}
           onClick={() => handleDateClick(prevDate)}
-          title="Geçmiş tarih"
+          title="Geçmiş ay"
         >
           {prevDate.getDate()}
         </div>
       );
     }
 
+    // Mevcut ayın günleri
     for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
       const currentDate = new Date(currentYear, currentMonth, day);
       const status = getDayStatus(currentDate);
+
       days.push(
         <div
           key={day}
@@ -164,6 +198,7 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
             status === 'maintenance' ? 'Bakım günü' :
             status === 'reservation' ? 'Rezerve edilmiş' :
             status === 'available' ? 'Müsait' :
+            status === 'past' ? 'Geçmiş tarih' :
             'Müsait değil'
           }
         >
@@ -188,8 +223,10 @@ const ReservationCalendar = ({ tinyHouse, startDate, endDate, onDateChange }) =>
       </div>
 
       <div className="calendar-weekdays">
-        {daysOfWeek.map(day => (
-          <div key={day} className="weekday">{day}</div>
+        {daysOfWeek.map((day, index) => (
+          <div key={day || index} className="weekday">
+            {day || 'N/A'}
+          </div>
         ))}
       </div>
 

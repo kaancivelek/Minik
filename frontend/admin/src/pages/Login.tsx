@@ -3,8 +3,8 @@ import { Form, Input, Button, Card, message, Alert } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE } from '../services/api';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7183/api';
 
 interface LoginForm {
   email: string;
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
       setLoading(true);
       console.log('Login attempt with:', values.email);
       
-      const response = await axios.post(`${API_BASE}/Login/login`, {
+      const response = await axios.post(`${API_BASE}/User/login`, {
         email: values.email,
         passwordHash: values.passwordHash,
       });
