@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.CodeAnalysis;
 using System.ComponentModel.Design;
 using System.Text.Json;
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Minik.Server.Controllers
 {
@@ -13,10 +15,12 @@ namespace Minik.Server.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
-        public ReservationsController(IConfiguration configuration)
+        public ReservationsController(IConfiguration configuration, ApplicationDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
         // GET api/reservations/tinyhouse/5
@@ -62,7 +66,6 @@ namespace Minik.Server.Controllers
             return Ok(reservations);
         }
 
-
         // GET api/reservations/5
         [HttpGet("user/{userId}")]
         public IActionResult GetReservationsByUserId(int userId)
@@ -107,14 +110,13 @@ namespace Minik.Server.Controllers
             return Ok(reservations);
         }
 
-
-
         // POST api/reservations
         [HttpPost]
         public IActionResult Post([FromBody] Reservation reservation)
         {
-            string connectionString = "Server=localhost;Database=MinikDB;Trusted_Connection=True;";
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
             int newReservationId = 0;
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"
@@ -136,40 +138,37 @@ VALUES
                 newReservationId = (int)command.ExecuteScalar();
             }
 
-            // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            // Log ekle - Using injected DbContext
+            var log = new backend.Models.AuditLog
             {
-                var log = new backend.Models.AuditLog
-                {
-                    UserId = null, // Giriş yapan adminin id'si eklenebilir
-                    Action = "Create",
-                    Entity = "Reservation",
-                    EntityId = newReservationId,
-                    OldValue = null,
-                    NewValue = JsonSerializer.Serialize(new {
-                        Id = newReservationId,
-                        reservation.UserId,
-                        reservation.TinyHouseId,
-                        reservation.TotalPrice,
-                        reservation.Status,
-                        reservation.CheckIn,
-                        reservation.CheckOut
-                    }),
-                    Timestamp = DateTime.UtcNow
-                };
-                context.AuditLogs.Add(log);
-                context.SaveChanges();
-            }
+                UserId = null, // Giriş yapan adminin id'si eklenebilir
+                Action = "Create",
+                Entity = "Reservation",
+                EntityId = newReservationId,
+                OldValue = null,
+                NewValue = JsonSerializer.Serialize(new {
+                    Id = newReservationId,
+                    reservation.UserId,
+                    reservation.TinyHouseId,
+                    reservation.TotalPrice,
+                    reservation.Status,
+                    reservation.CheckIn,
+                    reservation.CheckOut
+                }),
+                Timestamp = DateTime.UtcNow
+            };
+            _context.AuditLogs.Add(log);
+            _context.SaveChanges();
 
             return Ok("Rezervasyon başarıyla eklendi.");
         }
 
-
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            string connectionString = "Server=localhost;Database=MinikDB;Trusted_Connection=True;";
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
             object deletedReservation = null;
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -251,32 +250,29 @@ VALUES
                 }
             }
 
-            // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            // Log ekle - Using injected DbContext
+            var log = new backend.Models.AuditLog
             {
-                var log = new backend.Models.AuditLog
-                {
-                    UserId = null, // Giriş yapan adminin id'si eklenebilir
-                    Action = "Delete",
-                    Entity = "Reservation",
-                    EntityId = id,
-                    OldValue = System.Text.Json.JsonSerializer.Serialize(deletedReservation),
-                    NewValue = null,
-                    Timestamp = DateTime.UtcNow
-                };
-                context.AuditLogs.Add(log);
-                context.SaveChanges();
-            }
+                UserId = null, // Giriş yapan adminin id'si eklenebilir
+                Action = "Delete",
+                Entity = "Reservation",
+                EntityId = id,
+                OldValue = System.Text.Json.JsonSerializer.Serialize(deletedReservation),
+                NewValue = null,
+                Timestamp = DateTime.UtcNow
+            };
+            _context.AuditLogs.Add(log);
+            _context.SaveChanges();
 
             return Ok("Tüm ilişkili kayıtlar başarıyla silindi.");
         }
 
-
         [HttpPut("{id}")]
         public IActionResult UpdateReservation(int id, [FromBody] Reservation updatedReservation)
         {
-            string connectionString = "Server=localhost;Database=MinikDB;Trusted_Connection=True;";
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
             object oldReservation = null;
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
@@ -365,22 +361,19 @@ VALUES
                 }
             }
 
-            // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            // Log ekle - Using injected DbContext
+            var log = new backend.Models.AuditLog
             {
-                var log = new backend.Models.AuditLog
-                {
-                    UserId = null, // Giriş yapan adminin id'si eklenebilir
-                    Action = "Update",
-                    Entity = "Reservation",
-                    EntityId = id,
-                    OldValue = System.Text.Json.JsonSerializer.Serialize(oldReservation),
-                    NewValue = System.Text.Json.JsonSerializer.Serialize(newReservation),
-                    Timestamp = DateTime.UtcNow
-                };
-                context.AuditLogs.Add(log);
-                context.SaveChanges();
-            }
+                UserId = null, // Giriş yapan adminin id'si eklenebilir
+                Action = "Update",
+                Entity = "Reservation",
+                EntityId = id,
+                OldValue = System.Text.Json.JsonSerializer.Serialize(oldReservation),
+                NewValue = System.Text.Json.JsonSerializer.Serialize(newReservation),
+                Timestamp = DateTime.UtcNow
+            };
+            _context.AuditLogs.Add(log);
+            _context.SaveChanges();
 
             return Ok("Rezervasyon başarıyla güncellendi.");
         }
@@ -452,7 +445,5 @@ VALUES
 
             return Ok(reservations);
         }
-
     }
 }
-

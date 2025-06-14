@@ -32,7 +32,7 @@ function TinyHouseDetails({ user }) {
   const { tinyHouseId } = useParams();
 
 const showComments = (routingFrom) => {
-  if(routingFrom !=="CustomerPanel"){
+  if(routingFrom !== "CustomerPanel") {
     return tinyHouse && <Comment tinyHouseId={tinyHouse.id}></Comment>
 }}
 
@@ -44,6 +44,7 @@ const showComments = (routingFrom) => {
   };
 
   function showMakeReservationPanel(user, routingFrom) {
+
     if (
       (user.roleId === 1 || user.roleId === 3) &&
       routingFrom !== "CustomerPanel"

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const { Title } = Typography;
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7183/api';
+import { API_BASE } from '../services/api';
 
 const Reports: React.FC = () => {
   const [summary, setSummary] = useState<any>(null);

@@ -12,13 +12,12 @@ import {
 } from "reactstrap";
 import "../styles/CustomerPanel.css";
 import { toast, Slide } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import noListing from "../utils/noListing";
 export default function CustomerPanel({ user }) {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+
 
   // Form verilerini ayrı ayrı saklamak için
   const [formStates, setFormStates] = useState({});
@@ -146,9 +145,24 @@ export default function CustomerPanel({ user }) {
     }
   };
 
+const translateStatus = (status) => {
+  switch (status) {
+    case "confirmed":
+      return "Onaylandı";
+    case "pending":
+      return "Beklemede";
+    case "cancelled":
+      return "İptal Edildi";
+    case "completed":
+      return "Tamamlandı";
+    default:
+      return status;
+  }
+}
+  
   const showCommentForm = (reservation) => {
     const { status, tinyHouseId } = reservation;
-    if (status !== "completed") {
+    if (status === "completed") {
       return (
         <form onSubmit={(e) => handleCommentSubmit(tinyHouseId, e)}>
           <div className="form-group">
@@ -167,7 +181,7 @@ export default function CustomerPanel({ user }) {
         </form>
       );
     }
-    return <p>Yorum eklemek için rezervasyonun tamamlanmasını bekleyin.</p>;
+    return <p style={{fontSize:"12px"}}>Yorum eklemek için rezervasyonun tamamlanmasını bekleyin.</p>;
   };
 
   return (
@@ -199,7 +213,7 @@ export default function CustomerPanel({ user }) {
                   {item.checkOut.split("T")[0]}
                 </h5>
                 <CardTitle tag="h5">
-                  {item.status}, {item.totalPrice} ₺
+                  {translateStatus(item.status)}, {item.totalPrice} ₺
                 </CardTitle>
                 <CardSubtitle className="mb-2 text-muted" tag="h6">
                   {item.amenities}
