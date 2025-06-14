@@ -39,6 +39,7 @@ const showComments = (routingFrom) => {
   const showTinyHouseEditing = (routingFrom) => {
     if (routingFrom === "PropertyOwnerPanel") {
       return tinyHouse && <TinyHouseEditing tinyHouse={tinyHouse} />;
+      
     }
     return null;
   };

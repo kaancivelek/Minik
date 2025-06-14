@@ -13,7 +13,7 @@ import { Container } from "reactstrap";
 import { useState,useEffect, lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer, Slide } from "react-toastify";
-import TinyHouseAdding from "./pages/TinyHouseAdding";
+import ListingCRUDs from "./pages/ListingCRUDs";
 import ReservationList from "./pages/ReservationList";
 import Loading from "./utils/Loading";
 const AdminApp = lazy(() => import("../admin/src/App"));
@@ -69,9 +69,9 @@ else{
           />
 
        <Route
-            path="/insertTinyHouse"
+            path="/ListingCRUDs"
             element={
-              <TinyHouseAdding
+              <ListingCRUDs
                 user={user}
                 setUser={setUser}
                 insertTinyHouse={insertTinyHouse}

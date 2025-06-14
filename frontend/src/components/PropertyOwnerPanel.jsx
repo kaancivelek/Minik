@@ -53,8 +53,8 @@ export default function PropertyOwnerPanel({ user }) {
       state: { from: "PropertyOwnerPanel" },
     });
   };
-  const goInsertTinyHouse = () => {
-    navigate("/insertTinyHouse");
+  const goListingCRUDs = () => {
+    navigate("/ListingCRUDs");
   };
 
   return (
@@ -66,8 +66,8 @@ export default function PropertyOwnerPanel({ user }) {
       <Row>
         <input
           type="button"
-          onClick={goInsertTinyHouse}
-          value="İlan Bilgisi Ekle"
+          onClick={goListingCRUDs}
+          value="İlan Bilgisi İşlemleri"
           style={{ background: "transparent", justifyContent: "center" }}
         ></input>
         {error ? noListing() : <></>}
