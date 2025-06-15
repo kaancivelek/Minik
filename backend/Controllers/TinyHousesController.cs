@@ -45,17 +45,18 @@ namespace Minik.Server.Controllers
                 {
                     houses.Add(new TinyHouse
                     {
-                        Id = reader.GetInt32(0),
-                        Name = reader.GetString(1),
-                        Description = reader.IsDBNull(2) ? null : reader.GetString(2),
-                        LocationId = reader.GetInt32(3),
-                        PricePerNight = reader.GetDecimal(4),
-                        MaxGuests = reader.GetInt32(5),
-                        property_owner_id = reader.GetInt32(6),
-                        Amenities = reader.IsDBNull(7) ? null : reader.GetString(7),
-                        Country = reader.GetString(8),
-                        City = reader.GetString(9),
-                        Rating = reader.IsDBNull(10) ? 0 : Convert.ToInt32(reader[10])
+                        Id = (int)reader["id"],
+                        Name = reader["name"].ToString(),
+                        Description = reader["description"] as string,
+                        LocationId = (int)reader["location_id"],
+                        PricePerNight = (decimal)reader["price_per_night"],
+                        MaxGuests = (int)reader["max_guests"],
+                        property_owner_id = (int)reader["property_owner_id"],
+                        Amenities = reader["amenities"] as string,
+                        Country = reader["country"].ToString(),
+                        City = reader["city"].ToString(),
+                        Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["average_rating"])
+
                     });
                 }
             }
@@ -74,7 +75,7 @@ namespace Minik.Server.Controllers
             {
                 await conn.OpenAsync();
 
-                // Sadece is_freezed = 1 olanları say
+
                 int totalCount = 0;
                 var countCmd = new SqlCommand("SELECT COUNT(*) FROM tiny_houses WHERE is_freezed = 1", conn);
                 totalCount = (int)await countCmd.ExecuteScalarAsync();
@@ -84,7 +85,7 @@ namespace Minik.Server.Controllers
             SELECT T.*, L.country, L.city 
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 0
+            WHERE T.is_freezed = 0 
             ORDER BY T.id
             OFFSET @offset ROWS 
             FETCH NEXT @pageSize ROWS ONLY";
@@ -149,7 +150,8 @@ namespace Minik.Server.Controllers
                     WHERE T.id = reviews.tiny_house_id) AS average_rating
             FROM tiny_houses T
             INNER JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 0
+               INNER JOIN availability A ON A.tiny_house_id = T.id
+   WHERE T.is_freezed = 0 AND A.is_available = 1
             ORDER BY T.id
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
 
@@ -172,9 +174,9 @@ namespace Minik.Server.Controllers
                                 MaxGuests = reader.GetInt32(5),
                                 property_owner_id = reader.GetInt32(6),
                                 Amenities = reader.IsDBNull(7) ? null : reader.GetString(7),
-                                Country = reader.GetString(8),
-                                City = reader.GetString(9),
-                                Rating = reader.IsDBNull(10) ? 0 : reader.GetInt32(10)
+                                Country = reader.GetString(9),
+                                City = reader.GetString(10),
+                                Rating = reader.IsDBNull(11) ? 0 : reader.GetInt32(11)
                             });
                         }
                     }
@@ -261,8 +263,8 @@ namespace Minik.Server.Controllers
                         MaxGuests = reader.GetInt32(5),
                         property_owner_id = reader.GetInt32(6),
                         Amenities = reader.IsDBNull(7) ? null : reader.GetString(7),
-                        Country = reader.GetString(8),
-                        City = reader.GetString(9)
+                        Country = reader.GetString(9),
+                        City = reader.GetString(10)
                     });
                 }
             }

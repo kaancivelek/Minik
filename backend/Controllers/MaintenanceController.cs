@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using backend.Models;
+
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using backend.Models;
 
 namespace Minik.Server.Controllers
 {
@@ -40,7 +41,7 @@ namespace Minik.Server.Controllers
                             TinyHouseId = (int)reader["tiny_house_id"],
                             MaintenanceType = reader["maintenance_type"].ToString(),
                             MaintenanceDate = (DateTime)reader["maintenance_date"],
-                            Status = Enum.Parse<MaintenanceStatus>(reader["status"].ToString(),true)
+                            Status = Enum.Parse<MaintenanceStatus>(reader["status"].ToString(), true)
                         });
                     }
                 }
@@ -115,16 +116,17 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
             {
-                var log = new backend.Models.AuditLog
+                var log = new Minik.Server.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Create",
                     Entity = "Maintenance",
                     EntityId = newMaintenanceId,
                     OldValue = null,
-                    NewValue = System.Text.Json.JsonSerializer.Serialize(new {
+                    NewValue = System.Text.Json.JsonSerializer.Serialize(new
+                    {
                         Id = newMaintenanceId,
                         maintenance.TinyHouseId,
                         maintenance.MaintenanceType,
@@ -190,9 +192,9 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
             {
-                var log = new backend.Models.AuditLog
+                var log = new Minik.Server.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Delete",
@@ -304,9 +306,9 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
+            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
             {
-                var log = new backend.Models.AuditLog
+                var log = new Minik.Server.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Update",

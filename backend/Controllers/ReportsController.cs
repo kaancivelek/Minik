@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using backend.Data;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Minik.Server.Controllers
 {
@@ -10,76 +11,111 @@ namespace Minik.Server.Controllers
     [Route("api/admin/reports")]
     public class ReportsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public ReportsController(ApplicationDbContext context)
+        private readonly string _connectionString;
+
+        public ReportsController(IConfiguration configuration)
         {
-            _context = context;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         [HttpGet("summary")]
-        public IActionResult GetSummary()
+        public async Task<IActionResult> GetSummary()
         {
-            var totalReservations = _context.Set<backend.Models.Reservation>().Count();
-            var totalIncome = _context.Set<backend.Models.Reservation>().Sum(r => (decimal?)r.TotalPrice) ?? 0;
-            var totalUsers = _context.Set<backend.Models.User>().Count();
-            var totalTinyHouses = _context.TinyHouses.Count();
+            int totalReservations = 0, totalUsers = 0, totalTinyHouses = 0;
+            decimal totalIncome = 0;
 
-            var summary = new
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var cmd = new SqlCommand(@"
+                SELECT 
+                    (SELECT COUNT(*) FROM reservations) AS TotalReservations,
+                    (SELECT SUM(total_price) FROM reservations) AS TotalIncome,
+                    (SELECT COUNT(*) FROM users) AS TotalUsers,
+                    (SELECT COUNT(*) FROM tiny_houses) AS TotalTinyHouses", conn);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                totalReservations = reader.GetInt32(0);
+                totalIncome = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
+                totalUsers = reader.GetInt32(2);
+                totalTinyHouses = reader.GetInt32(3);
+            }
+
+            return Ok(new
             {
                 totalReservations,
                 totalIncome,
                 totalUsers,
                 totalTinyHouses
-            };
-            return Ok(summary);
+            });
         }
 
         [HttpGet("monthly-reservations")]
-        public IActionResult GetMonthlyReservations()
+        public async Task<IActionResult> GetMonthlyReservations()
         {
-            var data = _context.Set<backend.Models.Reservation>()
-                .GroupBy(r => new { r.CheckIn.Year, r.CheckIn.Month })
-                .Select(g => new
+            var list = new List<object>();
+
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var cmd = new SqlCommand(@"
+                SELECT 
+                    FORMAT(check_in, 'yyyy-MM') AS month, 
+                    COUNT(*) AS count
+                FROM reservations
+                GROUP BY FORMAT(check_in, 'yyyy-MM')
+                ORDER BY month", conn);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(new
                 {
-                    month = $"{g.Key.Year}-{g.Key.Month:D2}",
-                    count = g.Count()
-                })
-                .OrderBy(x => x.month)
-                .ToList();
-            return Ok(data);
+                    month = reader.GetString(0),
+                    count = reader.GetInt32(1)
+                });
+            }
+
+            return Ok(list);
         }
 
         [HttpGet("top-tinyhouses")]
-        public IActionResult GetTopTinyHouses()
+        public async Task<IActionResult> GetTopTinyHouses()
         {
-            var data = _context.Set<backend.Models.Reservation>()
-                .GroupBy(r => r.TinyHouseId)
-                .Select(g => new
-                {
-                    tinyHouseId = g.Key,
-                    reservationCount = g.Count()
-                })
-                .OrderByDescending(x => x.reservationCount)
-                .Take(5)
-                .ToList();
+            var list = new List<object>();
 
-            // TinyHouse isimlerini ekle
-            var result = data.Select(x => new
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var cmd = new SqlCommand(@"
+                SELECT TOP 5 
+                    th.name,
+                    COUNT(r.id) AS reservationCount
+                FROM reservations r
+                JOIN tiny_houses th ON r.tiny_house_id = th.id
+                GROUP BY th.name
+                ORDER BY reservationCount DESC", conn);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                tinyHouseName = _context.TinyHouses.FirstOrDefault(t => t.Id == x.tinyHouseId)?.Name ?? $"TinyHouse #{x.tinyHouseId}",
-                reservationCount = x.reservationCount
-            });
-            return Ok(result);
+                list.Add(new
+                {
+                    tinyHouseName = reader.GetString(0),
+                    reservationCount = reader.GetInt32(1)
+                });
+            }
+
+            return Ok(list);
         }
 
         [HttpGet("monthly-users")]
-        public IActionResult GetMonthlyUsers()
+        public async Task<IActionResult> GetMonthlyUsers()
         {
-            // Kullanıcı modelinde CreatedAt alanı yoksa, eklenmeli. Şimdilik Email üzerinden yıl/ay alınabilir.
-            // Burada CreatedAt alanı olmadığı için örnek olarak Id üzerinden ayırmak mantıklı değil, gerçek projede CreatedAt eklenmeli.
-            // Şimdilik boş veri dönelim.
-            var data = new List<object>();
-            return Ok(data);
+            // CreatedAt verisi yoksa boş liste döner
+            return Ok(new List<object>());
         }
     }
-} 
+}

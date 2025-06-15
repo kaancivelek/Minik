@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using backend.Models;
 
@@ -24,11 +24,12 @@ namespace backend.Controllers
             }
 
             string storedHash = null;
+            bool isFreezed = false;
 
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                string query = "SELECT password_hash FROM users WHERE email = @Email";
+                string query = "SELECT password_hash, is_freezed FROM users WHERE email = @Email";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Email", loginRequest.Email);
@@ -38,6 +39,7 @@ namespace backend.Controllers
                         if (reader.Read())
                         {
                             storedHash = reader["password_hash"].ToString();
+                            isFreezed = reader["is_freezed"] != DBNull.Value && (bool)reader["is_freezed"];
                         }
                         else
                         {
@@ -45,6 +47,11 @@ namespace backend.Controllers
                         }
                     }
                 }
+            }
+
+            if (isFreezed)
+            {
+                return Unauthorized("Bu hesap dondurulmuştur. Lütfen yöneticiyle iletişime geçin.");
             }
 
             bool isPasswordValid = BCrypt.Net.BCrypt.Verify(loginRequest.PasswordHash, storedHash);
