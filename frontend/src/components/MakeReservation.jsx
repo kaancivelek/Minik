@@ -6,7 +6,7 @@ import CheckoutForm from "./CheckoutForm";
 import "../styles/MakeReservation.css";
 import { toast, Slide } from "react-toastify";
 import { checkDateRangeAvailability } from "../utils/availabilityUtils";
-
+import { postPayment } from "../services/paymentService";
 
 function MakeReservation({ tinyHouse }) {
   const [reservationInfo, setReservationInfo] = useState({
@@ -63,7 +63,7 @@ function MakeReservation({ tinyHouse }) {
     try {
       const response = await postReservation(reservationData);
       if (response) {
-        toast.success("Rezervasyon başarıyla oluşturuldu!", {
+        toast.success("Rezervasyon isteği yollandı!", {
           position: "top-center",
           autoClose: 2000,
           theme: "dark",

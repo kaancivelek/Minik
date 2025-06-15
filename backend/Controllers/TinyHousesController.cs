@@ -75,7 +75,7 @@ Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["
             {
                 await conn.OpenAsync();
 
-                // Sadece is_freezed = 1 olanları say
+              
                 int totalCount = 0;
                 var countCmd = new SqlCommand("SELECT COUNT(*) FROM tiny_houses WHERE is_freezed = 1", conn);
                 totalCount = (int)await countCmd.ExecuteScalarAsync();
@@ -85,7 +85,7 @@ Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["
             SELECT T.*, L.country, L.city 
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 0
+            WHERE T.is_freezed = 0 
             ORDER BY T.id
             OFFSET @offset ROWS 
             FETCH NEXT @pageSize ROWS ONLY";
@@ -150,7 +150,8 @@ Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["
                     WHERE T.id = reviews.tiny_house_id) AS average_rating
             FROM tiny_houses T
             INNER JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 0
+               INNER JOIN availability A ON A.tiny_house_id = T.id
+   WHERE T.is_freezed = 0 AND A.is_available = 1
             ORDER BY T.id
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
 
