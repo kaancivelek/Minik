@@ -36,7 +36,8 @@ namespace Minik.Server.Controllers
                     FROM reviews 
                     WHERE tiny_house_id = T.id) AS average_rating
             FROM tiny_houses T
-            JOIN locations L ON T.location_id = L.id", conn);
+            JOIN locations L ON T.location_id = L.id
+            WHERE T.is_freezed = 1", conn);
 
                 var reader = await cmd.ExecuteReaderAsync();
 
@@ -62,6 +63,7 @@ namespace Minik.Server.Controllers
             return Ok(houses);
         }
 
+
         [HttpGet("catalog")]
         public async Task<ActionResult<IEnumerable<TinyHouse>>> GetTinyHousesPaged([FromQuery] int page = 1)
         {
@@ -72,16 +74,17 @@ namespace Minik.Server.Controllers
             {
                 await conn.OpenAsync();
 
-                // Toplam kaç kayıt olduğunu alalım
+                // Sadece is_freezed = 1 olanları say
                 int totalCount = 0;
-                var countCmd = new SqlCommand("SELECT COUNT(*) FROM tiny_houses", conn);
+                var countCmd = new SqlCommand("SELECT COUNT(*) FROM tiny_houses WHERE is_freezed = 1", conn);
                 totalCount = (int)await countCmd.ExecuteScalarAsync();
 
-                // Sayfalama için sorgu
+                // Sayfalama sorgusu
                 string query = @"
             SELECT T.*, L.country, L.city 
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
+            WHERE T.is_freezed = 1
             ORDER BY T.id
             OFFSET @offset ROWS 
             FETCH NEXT @pageSize ROWS ONLY";
@@ -121,6 +124,8 @@ namespace Minik.Server.Controllers
             }
         }
 
+
+
         [HttpGet("paged")]
         public async Task<ActionResult<IEnumerable<TinyHouse>>> GetTinyHousesPaged([FromQuery] int offset = 0, [FromQuery] int limit = 8)
         {
@@ -130,22 +135,21 @@ namespace Minik.Server.Controllers
             {
                 await conn.OpenAsync();
 
-                // 1. Availability durumlarını güncelleyen stored procedure'ü çalıştır
+                // 1. Availability prosedürü çalıştır
                 using (var cmdUpdate = new SqlCommand("EXEC sp_UpdateAvailabilityStatus", conn))
                 {
                     await cmdUpdate.ExecuteNonQueryAsync();
                 }
-                using (var cmdUpdate = new SqlCommand("EXEC sp_Update_Reservation_Status_To_Completed", conn))
-                {
-                    await cmdUpdate.ExecuteNonQueryAsync();
-                }
-                // 2. Paginated sorguyu çalıştır
+
+                // 2. Sadece is_freezed = 1 olanları getir
                 string query = @"
             SELECT T.*, L.country, L.city, 
-                (SELECT CEILING(AVG(rating)) FROM reviews WHERE T.id = reviews.tiny_house_id) AS average_rating
+                   (SELECT CEILING(AVG(rating)) 
+                    FROM reviews 
+                    WHERE T.id = reviews.tiny_house_id) AS average_rating
             FROM tiny_houses T
             INNER JOIN locations L ON T.location_id = L.id
-            WHERE T.id IS NOT NULL
+            WHERE T.is_freezed = 1
             ORDER BY T.id
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
 
@@ -179,6 +183,8 @@ namespace Minik.Server.Controllers
 
             return Ok(houses);
         }
+
+
 
 
 

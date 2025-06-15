@@ -44,5 +44,7 @@ namespace backend.Models
 
         public int Rating { get; set; }
 
+        
+
     }
 }
