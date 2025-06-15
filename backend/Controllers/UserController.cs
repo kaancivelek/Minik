@@ -35,7 +35,7 @@ namespace Minik.Server.Controllers
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                string query = "SELECT id, full_name, email, role_id, phone_number FROM users";
+                string query = "SELECT id, full_name, email, role_id, phone_number FROM users  WHERE is_freezed = 0";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = cmd.ExecuteReader())
@@ -64,7 +64,7 @@ namespace Minik.Server.Controllers
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                string query = "SELECT id, full_name, email, role_id, phone_number FROM users WHERE id = @id";
+                string query = "SELECT id, full_name, email, role_id, phone_number FROM users WHERE id = @id AND is_freezed = 0";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -104,7 +104,7 @@ namespace Minik.Server.Controllers
             {
                 conn.Open();
                 string query = @"SELECT id, full_name, email, role_id, phone_number 
-                         FROM users WHERE email = @Email";
+                         FROM users WHERE email = @Email AND is_freezed=0";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {

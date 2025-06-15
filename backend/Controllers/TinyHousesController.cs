@@ -37,7 +37,7 @@ namespace Minik.Server.Controllers
                     WHERE tiny_house_id = T.id) AS average_rating
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 1", conn);
+            WHERE T.is_freezed = 0", conn);
 
                 var reader = await cmd.ExecuteReaderAsync();
 
@@ -84,7 +84,7 @@ namespace Minik.Server.Controllers
             SELECT T.*, L.country, L.city 
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 1
+            WHERE T.is_freezed = 0
             ORDER BY T.id
             OFFSET @offset ROWS 
             FETCH NEXT @pageSize ROWS ONLY";
@@ -149,7 +149,7 @@ namespace Minik.Server.Controllers
                     WHERE T.id = reviews.tiny_house_id) AS average_rating
             FROM tiny_houses T
             INNER JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 1
+            WHERE T.is_freezed = 0
             ORDER BY T.id
             OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
 
