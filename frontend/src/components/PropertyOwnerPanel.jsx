@@ -3,7 +3,6 @@ import { getTinyHouseByPropertyOwnerId } from "../services/tinyHouseService";
 import {
   Card,
   CardBody,
-  CardTitle,
   CardSubtitle,
   CardText,
   Button,
@@ -44,25 +43,34 @@ export default function PropertyOwnerPanel({ user }) {
     }
   }, [user]);
 
+ const goTinyHouseDetails = (tinyHouseId) => {
+    navigate(`/TinyHouseDetails/${tinyHouseId}`, {
+      state: { from: "PropertyOwnerPanel" },
+    })};
+
   const goReservationList = (tinyHouseId) => {
-    navigate(`/ReservationList/${tinyHouseId}`,{ state: { from: "PropertyOwnerPanel" } });
-  
+    navigate(`/ReservationList/${tinyHouseId}`, {
+      state: { from: "PropertyOwnerPanel" },
+    });
   };
- const goInsertTinyHouse = () => {
+  const goInsertTinyHouse = () => {
     navigate("/insertTinyHouse");
-  }
+  };
 
-
- 
   return (
     <div className="listing-page" style={{ padding: "1rem" }}>
       {loading && <div>Yükleniyor...</div>}
-      
+
       <h2>Ev Sahibi Paneli</h2>
-      
+
       <Row>
-        <input type="button" onClick={goInsertTinyHouse} value="İlan Bilgisi Ekle"style={{background:"transparent",justifyContent:"center"}}></input>
-        {error?noListing():<></>}
+        <input
+          type="button"
+          onClick={goInsertTinyHouse}
+          value="İlan Bilgisi Ekle"
+          style={{ background: "transparent", justifyContent: "center" }}
+        ></input>
+        {error ? noListing() : <></>}
         {tinyHousesOfPropertyOwner.map((item) => (
           <Col
             key={item.id}
@@ -73,8 +81,14 @@ export default function PropertyOwnerPanel({ user }) {
             className="mb-4 mx-auto d-flex"
             style={{ flexDirection: "column" }}
           >
-            <Card className="flex-fill" style={{ width: "100%" }} >
-              <CardBody style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
+            <Card className="flex-fill" style={{ width: "100%" }}>
+              <CardBody
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.2rem",
+                }}
+              >
                 {/* 1. Ev Detayları */}
                 <div>
                   <h5 style={{ marginBottom: 4 }}>{item.name}</h5>
@@ -90,12 +104,21 @@ export default function PropertyOwnerPanel({ user }) {
                 </div>
                 {/* 2. Rezervasyon / Düzenleme */}
                 <div style={{ display: "flex", gap: "10px" }}>
-                  <Button color="success" size="sm"  onClick={() => goReservationList(item.id)}>
+                  <Button
+                    color="success"
+                    size="sm"
+                    onClick={() => goReservationList(item.id)}
+                  >
                     Rezervasyonlar
                   </Button>
-            
+                    <Button
+                    color="success"
+                    size="sm"
+                    onClick={() => goTinyHouseDetails(item.id)} 
+                  >
+                    Düzenle
+                  </Button>
                 </div>
-       
               </CardBody>
             </Card>
           </Col>
