@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using backend.Models;
+using Minik.Server.Models;
 using System.Text.Json;
 
 namespace Minik.Server.Controllers
@@ -164,15 +164,6 @@ namespace Minik.Server.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
         // POST: api/availability
         [HttpPost]
         public IActionResult AddAvailability([FromBody] Availability availability)
@@ -182,25 +173,56 @@ namespace Minik.Server.Controllers
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string query = @"
-                    INSERT INTO availability (tiny_house_id, available_from, available_to, is_available)
-                    VALUES (@TinyHouseId, @AvailableFrom, @AvailableTo, @IsAvailable)";
 
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                // 🔍 1. Çakışma kontrolü: SADECE aktif (is_available = 1) olanlara bak!
+                string checkQuery = @"
+            SELECT COUNT(*) FROM availability
+            WHERE tiny_house_id = @TinyHouseId
+            AND is_available = 1
+            AND (
+                (available_from <= @AvailableTo AND available_to >= @AvailableFrom)
+            )";
+
+                using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                 {
-                    cmd.Parameters.AddWithValue("@TinyHouseId", availability.TinyHouseId);
-                    cmd.Parameters.AddWithValue("@AvailableFrom", availability.AvailableFrom);
-                    cmd.Parameters.AddWithValue("@AvailableTo", availability.AvailableTo);
-                    cmd.Parameters.AddWithValue("@IsAvailable", availability.IsAvailable);
+                    checkCmd.Parameters.AddWithValue("@TinyHouseId", availability.TinyHouseId);
+                    checkCmd.Parameters.AddWithValue("@AvailableFrom", availability.AvailableFrom);
+                    checkCmd.Parameters.AddWithValue("@AvailableTo", availability.AvailableTo);
 
-                    cmd.ExecuteNonQuery();
+                    int count = (int)checkCmd.ExecuteScalar();
+                    if (count > 0)
+                    {
+                        return BadRequest("Bu tarih aralığında aktif bir uygunluk zaten mevcut.");
+                    }
+                }
+
+                // ✅ 2. Eklemeye devam
+                string insertQuery = @"
+            INSERT INTO availability (tiny_house_id, available_from, available_to, is_available)
+            VALUES (@TinyHouseId, @AvailableFrom, @AvailableTo, @IsAvailable)";
+
+                using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                {
+                    insertCmd.Parameters.AddWithValue("@TinyHouseId", availability.TinyHouseId);
+                    insertCmd.Parameters.AddWithValue("@AvailableFrom", availability.AvailableFrom);
+                    insertCmd.Parameters.AddWithValue("@AvailableTo", availability.AvailableTo);
+                    insertCmd.Parameters.AddWithValue("@IsAvailable", availability.IsAvailable);
+
+                    insertCmd.ExecuteNonQuery();
                 }
             }
 
-            return Ok("Uygunluk bilgisi başarıyla eklendi.");
+            return Ok(new
+            {
+                message = "Uygunluk bilgisi başarıyla eklendi.",
+                availability = availability
+            });
+
         }
 
+
         // PATCH: api/availability/{id}
+
         [HttpPatch("{id}")]
         public IActionResult UpdateAvailability(int id, [FromBody] JsonElement updatedFields)
         {
@@ -210,66 +232,64 @@ namespace Minik.Server.Controllers
             {
                 conn.Open();
 
+                // Önce mevcut kayıt var mı kontrol et
                 string selectQuery = "SELECT * FROM availability WHERE id = @Id";
-                Availability existing = null;
-
                 using (SqlCommand selectCmd = new SqlCommand(selectQuery, conn))
                 {
                     selectCmd.Parameters.AddWithValue("@Id", id);
                     using (var reader = selectCmd.ExecuteReader())
                     {
-                        if (reader.Read())
-                        {
-                            existing = new Availability
-                            {
-                                Id = id,
-                                TinyHouseId = (int)reader["tiny_house_id"],
-                                AvailableFrom = (DateTime)reader["available_from"],
-                                AvailableTo = (DateTime)reader["available_to"],
-                                IsAvailable = (bool)reader["is_available"]
-                            };
-                        }
-                        else
-                        {
+                        if (!reader.Read())
                             return NotFound("Güncellenecek uygunluk kaydı bulunamadı.");
-                        }
                     }
                 }
 
-                // Gelen değerlerle eskiyi güncelle
+                // Dinamik güncelleme için alanlar
+                List<string> updates = new List<string>();
+                var parameters = new List<SqlParameter>();
+
+                if (updatedFields.TryGetProperty("tiny_house_id", out var houseProp))
+                {
+                    updates.Add("tiny_house_id = @TinyHouseId");
+                    parameters.Add(new SqlParameter("@TinyHouseId", houseProp.GetInt32()));
+                }
+
                 if (updatedFields.TryGetProperty("available_from", out var fromProp))
-                    existing.AvailableFrom = fromProp.GetDateTime();
+                {
+                    updates.Add("available_from = @AvailableFrom");
+                    parameters.Add(new SqlParameter("@AvailableFrom", fromProp.GetDateTime()));
+                }
+
                 if (updatedFields.TryGetProperty("available_to", out var toProp))
-                    existing.AvailableTo = toProp.GetDateTime();
-                if (updatedFields.TryGetProperty("is_available", out var availableProp))
-                    existing.IsAvailable = availableProp.GetBoolean();
+                {
+                    updates.Add("available_to = @AvailableTo");
+                    parameters.Add(new SqlParameter("@AvailableTo", toProp.GetDateTime()));
+                }
 
-                string updateQuery = @"
-            UPDATE availability 
-            SET available_from = @From,
-                available_to = @To,
-                is_available = @IsAvailable
-            WHERE id = @Id";
+                if (updatedFields.TryGetProperty("is_available", out var isAvailableProp))
+                {
+                    updates.Add("is_available = @IsAvailable");
+                    parameters.Add(new SqlParameter("@IsAvailable", isAvailableProp.GetBoolean()));
+                }
 
+                if (updates.Count == 0)
+                    return BadRequest("Hiçbir güncelleme alanı gönderilmedi.");
+
+                string updateQuery = $"UPDATE availability SET {string.Join(", ", updates)} WHERE id = @Id";
                 using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
                 {
-                    updateCmd.Parameters.AddWithValue("@From", existing.AvailableFrom);
-                    updateCmd.Parameters.AddWithValue("@To", existing.AvailableTo);
-                    updateCmd.Parameters.AddWithValue("@IsAvailable", existing.IsAvailable);
                     updateCmd.Parameters.AddWithValue("@Id", id);
+                    foreach (var param in parameters)
+                    {
+                        updateCmd.Parameters.Add(param);
+                    }
 
                     updateCmd.ExecuteNonQuery();
                 }
             }
 
-            return Ok("Uygunluk başarıyla güncellendi.");
+            return Ok("Uygunluk bilgisi başarıyla güncellendi.");
         }
-
-
-         
-
-
-
 
 
         // DELETE: api/availability/{id}

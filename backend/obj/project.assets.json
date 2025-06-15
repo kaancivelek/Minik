@@ -2830,23 +2830,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kaanc\\.nuget\\packages\\": {},
+    "C:\\Users\\kayan\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\kayan\\Source\\Repos\\Minik\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\backend.csproj",
-      "packagesPath": "C:\\Users\\kaanc\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\obj\\",
+      "projectPath": "C:\\Users\\kayan\\Source\\Repos\\Minik\\backend\\backend.csproj",
+      "packagesPath": "C:\\Users\\kayan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kayan\\Source\\Repos\\Minik\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\kaanc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kayan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2931,7 +2931,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   },

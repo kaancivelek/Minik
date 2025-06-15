@@ -1,13 +1,41 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\",
+  "WorkspaceRootPath": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kaanc\\desktop\\minik\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:controllers\\paymentscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\controllers\\discountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:controllers\\discountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\models\\discount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:models\\discount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:models\\payment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\models\\houseimages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:models\\houseimages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\models\\reservation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:models\\reservation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kaanc\\desktop\\minik\\backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|c:\\users\\kayan\\source\\repos\\minik\\backend\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{3E44337E-4A8F-4526-898D-3A87D9148CCB}|backend.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
@@ -27,28 +55,118 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-14T22:05:23.563Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PaymentsController.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Controllers\\PaymentsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PaymentsController.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Controllers\\PaymentsController.cs",
+              "RelativeToolTip": "Controllers\\PaymentsController.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAAA4AAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:20:15.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Payment.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Payment.cs",
+              "RelativeDocumentMoniker": "Models\\Payment.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Payment.cs",
+              "RelativeToolTip": "Models\\Payment.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAA+wCUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:00:44.072Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DiscountsController.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Controllers\\DiscountsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DiscountsController.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Controllers\\DiscountsController.cs",
+              "RelativeToolTip": "Controllers\\DiscountsController.cs",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAgwHQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:13:25.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Discount.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Discount.cs",
+              "RelativeDocumentMoniker": "Models\\Discount.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Discount.cs",
+              "RelativeToolTip": "Models\\Discount.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:17:20.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HouseImages.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\HouseImages.cs",
+              "RelativeDocumentMoniker": "Models\\HouseImages.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\HouseImages.cs",
+              "RelativeToolTip": "Models\\HouseImages.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:16:14.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Reservation.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Reservation.cs",
+              "RelativeDocumentMoniker": "Models\\Reservation.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Models\\Reservation.cs",
+              "RelativeToolTip": "Models\\Reservation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-14T20:04:55.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\Program.cs",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAADAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-12T11:06:49.281Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "launchSettings.json",
-              "DocumentMoniker": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\Properties\\launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
-              "ToolTip": "C:\\Users\\kaanc\\Desktop\\Minik\\backend\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\kayan\\source\\repos\\Minik\\backend\\Properties\\launchSettings.json",
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-12T11:02:28.613Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-12T11:02:28.613Z"
             }
           ]
         }
