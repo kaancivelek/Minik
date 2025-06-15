@@ -135,7 +135,10 @@ namespace Minik.Server.Controllers
                 {
                     await cmdUpdate.ExecuteNonQueryAsync();
                 }
-
+                using (var cmdUpdate = new SqlCommand("EXEC sp_Update_Reservation_Status_To_Completed", conn))
+                {
+                    await cmdUpdate.ExecuteNonQueryAsync();
+                }
                 // 2. Paginated sorguyu çalıştır
                 string query = @"
             SELECT T.*, L.country, L.city, 
