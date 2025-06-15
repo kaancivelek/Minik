@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using backend.Models;
+using Minik.Server.Models;
 using System.Text.Json;
 
 namespace Minik.Server.Controllers
