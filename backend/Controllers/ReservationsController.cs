@@ -8,7 +8,7 @@ using System.Text.Json;
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

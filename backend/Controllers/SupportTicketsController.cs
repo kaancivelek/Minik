@@ -4,7 +4,7 @@ using backend.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

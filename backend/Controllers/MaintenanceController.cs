@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using Minik.Server.Models;
+using backend.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
-namespace Minik.Server.Controllers
+using backend.Data;
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -115,9 +115,9 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
+            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
             {
-                var log = new Minik.Server.Models.AuditLog
+                var log = new backend.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Create",
@@ -190,9 +190,9 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
+            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
             {
-                var log = new Minik.Server.Models.AuditLog
+                var log = new backend.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Delete",
@@ -304,9 +304,9 @@ namespace Minik.Server.Controllers
             }
 
             // Log ekle
-            using (var context = new Minik.Server.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<Minik.Server.Data.ApplicationDbContext>()))
+            using (var context = new backend.Data.ApplicationDbContext(new Microsoft.EntityFrameworkCore.DbContextOptions<backend.Data.ApplicationDbContext>()))
             {
-                var log = new Minik.Server.Models.AuditLog
+                var log = new backend.Models.AuditLog
                 {
                     UserId = null, // Giriş yapan adminin id'si eklenebilir
                     Action = "Update",

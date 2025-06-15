@@ -10,7 +10,7 @@ using backend.Models;
 
 using BCrypt.Net;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

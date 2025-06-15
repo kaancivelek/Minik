@@ -12,5 +12,6 @@
         public int? MaxGuests { get; set; }
         public int? PropertyOwnerId { get; set; }
         public string? Amenities { get; set; }
+        public bool? IsFreezed { get; set; }
     }
 }

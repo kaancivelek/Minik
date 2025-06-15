@@ -36,7 +36,7 @@ const AdminLayout: React.FC = () => {
     {
       key: 'houses',
       icon: <BankOutlined />,
-      label: 'Tiny Houses',
+      label: 'Evler',
     },
     {
       key: 'reservations',
@@ -87,7 +87,9 @@ const AdminLayout: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminUser');
-    navigate('/admin/login');
+    localStorage.removeItem('user');
+    navigate('/');
+    location.reload();
   };
 
   return (

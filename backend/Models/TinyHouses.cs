@@ -34,6 +34,9 @@ namespace backend.Models
         [Column("amenities")]
         public string Amenities { get; set; }
 
+        [Column("is_freezed")]
+        public Boolean Is_freezed { get; set; }
+
         [Column("country")]
         public string Country { get; set; }
 

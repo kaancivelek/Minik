@@ -4,7 +4,7 @@ using backend.Data;
 using backend.Models;
 
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +37,7 @@ namespace Minik.Server.Controllers
                     WHERE tiny_house_id = T.id) AS average_rating
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            WHERE T.is_freezed = 0", conn);
+            ", conn);
 
                 var reader = await cmd.ExecuteReaderAsync();
 
@@ -53,6 +53,7 @@ PricePerNight = (decimal)reader["price_per_night"],
 MaxGuests = (int)reader["max_guests"],
 property_owner_id = (int)reader["property_owner_id"],
 Amenities = reader["amenities"] as string,
+Is_freezed = (bool)reader["is_freezed"],
 Country = reader["country"].ToString(),
 City = reader["city"].ToString(),
 Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["average_rating"])
@@ -375,6 +376,11 @@ Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["
                 {
                     setClauses.Add("amenities = @amenities");
                     cmd.Parameters.AddWithValue("@amenities", update.Amenities);
+                }
+                if (update.IsFreezed.HasValue)
+                {
+                    setClauses.Add("is_freezed = @is_freezed");
+                    cmd.Parameters.AddWithValue("@is_freezed", update.IsFreezed.Value);
                 }
 
                 if (!setClauses.Any())

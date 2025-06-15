@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data.SqlClient;
-using Minik.Server.Models;
+using backend.Models;
 using System.Text.Json;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

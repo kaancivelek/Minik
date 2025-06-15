@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Input, Spin, Alert, Modal, Form, message } from 'antd';
+import { Table, Button, Space, Input, Spin, Alert, Modal, Form, message, Switch } from 'antd';
 import { SearchOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../store';
 import { fetchHouses, createHouse, editHouse, removeHouse } from '../store/houseSlice';
 import type { HouseCreate, HouseUpdate } from '../services/houseService';
+import { updateHouseStatus } from '../services/houseService';
 
 const Houses: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -79,6 +80,17 @@ const Houses: React.FC = () => {
     setEditingHouseId(null);
   };
 
+  const handleStatusChange = async (checked: boolean, record: any) => {
+    try {
+      await updateHouseStatus(record.id, !checked);
+      dispatch(fetchHouses()); // Listeyi yenile
+      message.success('Durum güncellendi');
+    } catch (err) {
+      console.error('PATCH Error:', err);
+      message.error('Durum güncellenirken bir hata oluştu');
+    }
+  };
+
   const columns: ColumnsType<typeof houses[0]> = [
     {
       title: 'ID',
@@ -105,7 +117,16 @@ const Houses: React.FC = () => {
       title: 'Durum',
       dataIndex: 'status',
       key: 'status',
-      render: () => <span>Aktif</span>, // Geliştirilebilir
+      render: (_, record) => (
+        <Space>
+          <Switch
+            checked={!record.is_freezed}
+            onChange={(checked) => handleStatusChange(checked, record)}
+            checkedChildren="Aktif"
+            unCheckedChildren="Pasif"
+          />
+        </Space>
+      ),
     },
     {
       title: 'Kapasite',
@@ -146,7 +167,11 @@ const Houses: React.FC = () => {
         </Button>
       </div>
       {loading ? (
-        <Spin tip="Yükleniyor..." />
+        <div style={{ textAlign: 'center', padding: '50px' }}>
+          <Spin>
+            <div style={{ padding: '50px' }}>Yükleniyor...</div>
+          </Spin>
+        </div>
       ) : error ? (
         <Alert type="error" message={error} />
       ) : (

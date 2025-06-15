@@ -15,6 +15,7 @@ export interface House {
   country?: string;
   city?: string;
   rating?: number;
+  is_freezed?: boolean;
 }
 
 export interface HouseCreate {
@@ -35,6 +36,7 @@ export interface HouseUpdate {
   maxGuests?: number;
   property_owner_id?: number;
   amenities?: string;
+  is_freezed?: boolean;
 }
 
 export const getAllHouses = async (): Promise<House[]> => {
@@ -54,6 +56,16 @@ export const addHouse = async (data: HouseCreate) => {
 
 export const updateHouse = async (id: number, data: HouseUpdate) => {
   const res = await axios.patch(`${API_BASE}/TinyHouses/update/${id}`, data);
+  return res.data;
+};
+
+export const updateHouseStatus = async (id: number, isFreezed: boolean) => {
+  const requestData = { IsFreezed: isFreezed };
+  console.log('Sending PATCH request:', {
+    url: `${API_BASE}/TinyHouses/update/${id}`,
+    data: requestData
+  });
+  const res = await axios.patch(`${API_BASE}/TinyHouses/update/${id}`, requestData);
   return res.data;
 };
 

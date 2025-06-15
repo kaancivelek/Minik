@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

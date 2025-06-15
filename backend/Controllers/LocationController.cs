@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using backend.Models;
 
-namespace Minik.Server.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
