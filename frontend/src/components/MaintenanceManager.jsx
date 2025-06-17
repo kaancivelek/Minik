@@ -11,31 +11,49 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
   useEffect(() => {
     if (selectedTinyHouseId) {
       getMaintenanceByTinyHouseId(selectedTinyHouseId)
-        .then(setMaintenanceRecords)
+        .then(data => {
+          // Status'u undefined olan kayıtları filtrele
+          const filteredData = data.filter(maintenance => 
+            maintenance.maintenanceType !== 'undefined' && 
+            maintenance.status !== null
+          );
+          setMaintenanceRecords(filteredData);
+        })
         .catch(() => setMaintenanceRecords([]));
     }
   }, [selectedTinyHouseId, action]);
+
+  // Durum string'ini enum değerine çevir
+  const getStatusEnum = (statusString) => {
+    const statusMap = {
+      'planned': 0,
+      'pending': 1,
+      'completed': 2,
+      'cancelled': 3
+    };
+    return statusMap[statusString] || 0;
+  };
 
   // Yeni bakım kaydı ekleme
   const handleMaintenanceSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    
+    // API'nin beklediği formata uygun veri hazırla
     const maintenanceData = {
+      id: 0, // Yeni kayıt için 0
       tinyHouseId: parseInt(selectedTinyHouseId),
       maintenanceType: formData.get('maintenanceType'),
-      description: formData.get('description'),
-      scheduledDate: formData.get('scheduledDate'),
-      completedDate: formData.get('completedDate') || null,
-      cost: parseFloat(formData.get('cost')) || 0,
-      status: formData.get('status'),
-      notes: formData.get('notes') || '',
+      maintenanceDate: formData.get('scheduledDate') + 'T00:00:00.000Z', // ISO string format
+      status: getStatusEnum(formData.get('status'))
     };
 
     try {
       await postMaintenance(maintenanceData);
       alert('Bakım kaydı başarıyla eklendi!');
       setAction(null);
-    } catch {
+    } catch (error) {
+      console.error('Bakım kaydı eklenirken hata:', error);
       alert('Bakım kaydı eklenemedi.');
     }
   };
@@ -52,6 +70,23 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
       }
     }
   };
+
+  // Durum enum'unu string'e çevir (görüntüleme için)
+  const getStatusText = (statusEnum) => {
+    const statusMap = {
+      0: 'Planlandı',
+      1: 'Devam Ediyor',
+      2: 'Tamamlandı',
+      3: 'İptal Edildi'
+    };
+    return statusMap[statusEnum] || 'Bilinmiyor';
+  };
+
+  // Status'u geçerli olan kayıtları filtrele (render sırasında da kontrol)
+  const validMaintenanceRecords = maintenanceRecords.filter(maintenance => 
+    maintenance.status !== undefined && 
+    maintenance.status !== null
+  );
 
   return (
     <div>
@@ -100,36 +135,17 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
             <form onSubmit={handleMaintenanceSubmit}>
               <div>
                 <label>Bakım Türü:</label>
-                <select name="maintenanceType" required>
-                  <option value="">Bakım Türü Seçin</option>
-                  <option value="cleaning">Temizlik</option>
-                  <option value="repair">Onarım</option>
-                  <option value="inspection">İnceleme</option>
-                  <option value="preventive">Önleyici Bakım</option>
-                  <option value="emergency">Acil Müdahale</option>
-                  <option value="upgrade">Yükseltme</option>
-                  <option value="other">Diğer</option>
-                </select>
+                <input 
+                  type="text" 
+                  name="maintenanceType" 
+                  required 
+                  placeholder="Örn: Temizlik, Onarım, İnceleme"
+                />
               </div>
               
               <div>
-                <label>Açıklama:</label>
-                <textarea name="description" required placeholder="Bakım detaylarını açıklayın..."></textarea>
-              </div>
-              
-              <div>
-                <label>Planlanan Tarih:</label>
+                <label>Bakım Tarihi:</label>
                 <input type="date" name="scheduledDate" required />
-              </div>
-              
-              <div>
-                <label>Tamamlanma Tarihi (İsteğe bağlı):</label>
-                <input type="date" name="completedDate" />
-              </div>
-              
-              <div>
-                <label>Maliyet (TL):</label>
-                <input type="number" name="cost" step="0.01" min="0" defaultValue="0" />
               </div>
               
               <div>
@@ -140,11 +156,6 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
                   <option value="completed">Tamamlandı</option>
                   <option value="cancelled">İptal Edildi</option>
                 </select>
-              </div>
-              
-              <div>
-                <label>Notlar (İsteğe bağlı):</label>
-                <textarea name="notes" placeholder="Ek notlar..."></textarea>
               </div>
               
               <button type="submit" className="submit-button">Kaydet</button>
@@ -176,23 +187,15 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
 
           {selectedTinyHouseId && (
             <div style={{ marginTop: '20px' }}>
-              {maintenanceRecords.length === 0 ? (
-                <p>Bu Tiny House için bakım kaydı bulunamadı.</p>
+              {validMaintenanceRecords.length === 0 ? (
+                <p>Bu Tiny House için geçerli bakım kaydı bulunamadı.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {maintenanceRecords.map((maintenance) => (
+                  {validMaintenanceRecords.map((maintenance) => (
                     <div key={maintenance.id} className="item-card">
                       <h3>{maintenance.maintenanceType}</h3>
-                      <p><strong>Açıklama:</strong> {maintenance.description}</p>
-                      <p><strong>Planlanan Tarih:</strong> {new Date(maintenance.scheduledDate).toLocaleDateString('tr-TR')}</p>
-                      {maintenance.completedDate && (
-                        <p><strong>Tamamlanma Tarihi:</strong> {new Date(maintenance.completedDate).toLocaleDateString('tr-TR')}</p>
-                      )}
-                      <p><strong>Durum:</strong> {maintenance.status}</p>
-                      <p><strong>Maliyet:</strong> {maintenance.cost} TL</p>
-                      {maintenance.notes && (
-                        <p><strong>Notlar:</strong> {maintenance.notes}</p>
-                      )}
+                      <p><strong>Tarih:</strong> {new Date(maintenance.maintenanceDate).toLocaleDateString('tr-TR')}</p>
+                      <p><strong>Durum:</strong> {getStatusText(maintenance.status)}</p>
                     </div>
                   ))}
                 </div>
@@ -228,17 +231,15 @@ export default function MaintenanceManager({ tinyHouses, userId, onBack }) {
 
           {selectedTinyHouseId && (
             <div style={{ marginTop: '20px' }}>
-              {maintenanceRecords.length === 0 ? (
-                <p>Bu Tiny House için bakım kaydı bulunamadı.</p>
+              {validMaintenanceRecords.length === 0 ? (
+                <p>Bu Tiny House için silinebilir bakım kaydı bulunamadı.</p>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {maintenanceRecords.map((maintenance) => (
+                  {validMaintenanceRecords.map((maintenance) => (
                     <div key={maintenance.id} className="item-card">
                       <h3>{maintenance.maintenanceType}</h3>
-                      <p><strong>Açıklama:</strong> {maintenance.description}</p>
-                      <p><strong>Planlanan Tarih:</strong> {new Date(maintenance.scheduledDate).toLocaleDateString('tr-TR')}</p>
-                      <p><strong>Durum:</strong> {maintenance.status}</p>
-                      <p><strong>Maliyet:</strong> {maintenance.cost} TL</p>
+                      <p><strong>Tarih:</strong> {new Date(maintenance.maintenanceDate).toLocaleDateString('tr-TR')}</p>
+                      <p><strong>Durum:</strong> {getStatusText(maintenance.status)}</p>
                       <div className="card-actions">
                         <button 
                           onClick={() => handleMaintenanceDelete(maintenance.id)} 

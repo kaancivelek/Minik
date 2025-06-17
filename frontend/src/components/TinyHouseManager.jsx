@@ -10,17 +10,21 @@ export default function TinyHouseManager({ user, onBack }) {
   const userId = user?.id || null;
 
   // Tiny house'ları ve lokasyonları yükle
-  useEffect(() => {
-    if (userId) {
-      loadTinyHouses();
-      loadLocations();
-    }
-  }, [userId]);
+ useEffect(() => {
+  console.log("userId:", userId);
+  console.log("user:", user);
+  if (userId) {
+    loadTinyHouses();
+    loadLocations();
+  }
+}, [userId]);
+
 
   const loadTinyHouses = async () => {
     try {
       const tinyHouseData = await getTinyHouseByPropertyOwnerId(userId);
       setTinyHouses(tinyHouseData);
+      
     } catch (error) {
       setTinyHouses([]);
     }

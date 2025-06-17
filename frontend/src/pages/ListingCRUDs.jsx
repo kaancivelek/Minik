@@ -38,6 +38,7 @@ export default function TinyHouseAdding({ user }) {
   // Belirli manager'ları render et
   const renderCurrentManager = () => {
     const commonProps = {
+      user,
       tinyHouses,
       locations,
       userId,
@@ -70,67 +71,57 @@ export default function TinyHouseAdding({ user }) {
             
             {/* Tiny House İşlemleri */}
             <div className="action-section tiny-house-section">
-              <div className="section-title">🏠 Tiny House İşlemleri</div>
+       
               <div className="section-buttons">
                 <button onClick={() => setCurrentManager('tinyhouse')}>
                   Tiny House Yönetimi
                 </button>
               </div>
-              <div className="section-description">
-                Tiny House ekleme, düzenleme ve silme işlemleri
-              </div>
+              
             </div>
 
             {/* Lokasyon İşlemleri */}
             <div className="action-section location-section">
-              <div className="section-title">📍 Lokasyon İşlemleri</div>
+      
               <div className="section-buttons">
                 <button onClick={() => setCurrentManager('location')}>
                   Lokasyon Yönetimi
                 </button>
               </div>
-              <div className="section-description">
-                Lokasyon ekleme, düzenleme ve görüntüleme işlemleri
-              </div>
+            
             </div>
 
             {/* Medya İşlemleri */}
             <div className="action-section media-section">
-              <div className="section-title">🖼️ Medya İşlemleri</div>
+         
               <div className="section-buttons">
                 <button onClick={() => setCurrentManager('media')}>
                   Medya Yönetimi
                 </button>
               </div>
-              <div className="section-description">
-                Fotoğraf ekleme ve silme işlemleri
-              </div>
+           
             </div>
 
             {/* Müsaitlik İşlemleri */}
             <div className="action-section availability-section">
-              <div className="section-title">📅 Müsaitlik İşlemleri</div>
+            
               <div className="section-buttons">
                 <button onClick={() => setCurrentManager('availability')}>
                   Müsaitlik Yönetimi
                 </button>
               </div>
-              <div className="section-description">
-                Müsaitlik ekleme, düzenleme ve silme işlemleri
-              </div>
+          
             </div>
 
             {/* Bakım İşlemleri */}
             <div className="action-section maintenance-section">
-              <div className="section-title">🔧 Bakım İşlemleri</div>
+          
               <div className="section-buttons">
                 <button onClick={() => setCurrentManager('maintenance')}>
                   Bakım Yönetimi
                 </button>
               </div>
-              <div className="section-description">
-                Bakım kayıtları ekleme, görüntüleme ve silme işlemleri
-              </div>
+             
             </div>
 
           </div>
