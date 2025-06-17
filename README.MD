@@ -11,7 +11,7 @@ March 13, 2025
 - **Kaan Civelek** - Full-Stack & Project Lead
 - **Naciye Kaya** - Backend Controllers And Models
 - **Nebi Çiftkaldıran** - Backend Controllers And Models 
-- **Raif Mert İkier** - Database Structure And Model
+- **Raif Mert İkier** - Database Structure And Model && Admin Panel
 
 ## 🧾 Project Description
 
