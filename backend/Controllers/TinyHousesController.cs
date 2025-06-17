@@ -37,7 +37,7 @@ namespace backend.Controllers
                     WHERE tiny_house_id = T.id) AS average_rating
             FROM tiny_houses T
             JOIN locations L ON T.location_id = L.id
-            ", conn);
+            WHERE T.is_freezed = 0", conn);
 
                 var reader = await cmd.ExecuteReaderAsync();
 
@@ -45,18 +45,17 @@ namespace backend.Controllers
                 {
                     houses.Add(new TinyHouse
                     {
-                       Id = (int)reader["id"],
-Name = reader["name"].ToString(),
-Description = reader["description"] as string,
-LocationId = (int)reader["location_id"],
-PricePerNight = (decimal)reader["price_per_night"],
-MaxGuests = (int)reader["max_guests"],
-property_owner_id = (int)reader["property_owner_id"],
-Amenities = reader["amenities"] as string,
-Is_freezed = (bool)reader["is_freezed"],
-Country = reader["country"].ToString(),
-City = reader["city"].ToString(),
-Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["average_rating"])
+                        Id = (int)reader["id"],
+                        Name = reader["name"].ToString(),
+                        Description = reader["description"] as string,
+                        LocationId = (int)reader["location_id"],
+                        PricePerNight = (decimal)reader["price_per_night"],
+                        MaxGuests = (int)reader["max_guests"],
+                        property_owner_id = (int)reader["property_owner_id"],
+                        Amenities = reader["amenities"] as string,
+                        Country = reader["country"].ToString(),
+                        City = reader["city"].ToString(),
+                        Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["average_rating"])
 
                     });
                 }
@@ -76,7 +75,7 @@ Rating = reader["average_rating"] == DBNull.Value ? 0 : Convert.ToInt32(reader["
             {
                 await conn.OpenAsync();
 
-              
+
                 int totalCount = 0;
                 var countCmd = new SqlCommand("SELECT COUNT(*) FROM tiny_houses WHERE is_freezed = 1", conn);
                 totalCount = (int)await countCmd.ExecuteScalarAsync();
